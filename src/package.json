@@ -1,0 +1,20 @@
+{
+  "name": "redux-observable-util",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "Redux Observable Util is a helper library for using Redux and Redux Observable in TypeScript.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KaneFreeman/redux-observable-util"
+  },
+  "homepage": "https://kanefreeman.github.io/redux-observable-util/",
+  "bugs": {
+    "url": "https://github.com/kanefreeman/redux-observable-util/issues"
+  },
+  "keywords" :["Redux"],
+  "peerDependencies": {
+    "redux": "^4.0.0",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.0.0"
+  }
+}

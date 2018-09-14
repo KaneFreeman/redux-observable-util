@@ -1,0 +1,100 @@
+defaults: &defaults
+  docker:
+    - image: 'circleci/node:8-browsers'
+  working_directory: ~/repo
+
+repo_cache: &repo_cache
+  key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+
+deps_cache: &deps_cache
+  key: v1-dependencies-{{ checksum "yarn.lock" }}
+
+version: 2
+jobs:
+  checkout_code:
+    <<: *defaults
+    steps:
+      - checkout
+      - save_cache:
+          <<: *repo_cache
+          paths:
+            - ~/repo
+            
+  install_dependencies:
+    <<: *defaults
+    steps:
+      - restore_cache: *repo_cache
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "yarn.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          <<: *deps_cache
+
+  lint:
+    <<: *defaults
+    steps:
+      - restore_cache: *repo_cache
+      - restore_cache: *deps_cache
+      - run: yarn lint
+
+  test:
+    <<: *defaults
+    steps:
+      - restore_cache: *repo_cache
+      - restore_cache: *deps_cache
+      - run: yarn test:ci
+
+  build:
+    <<: *defaults
+    steps:
+      - restore_cache: *repo_cache
+      - restore_cache: *deps_cache
+      - run: yarn build
+
+  deploy:
+    <<: *defaults
+    filters:
+      tags:
+        only: /.*/
+      branches:
+        only: master
+    steps:
+      - restore_cache: *repo_cache
+      - restore_cache: *deps_cache
+      - run: yarn package
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - checkout_code
+      - install_dependencies:
+          requires:
+            - checkout_code
+      - lint:
+          requires:
+            - install_dependencies
+      - test:
+          requires:
+            - install_dependencies
+      - build:
+          requires:
+            - install_dependencies
+#      - deploy:
+#          requires:
+#            - lint
+#            - test
+#            - build
