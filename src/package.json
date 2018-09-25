@@ -1,6 +1,6 @@
 {
   "name": "redux-observable-util",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "MIT",
   "description": "Redux Observable Util is a helper library for using Redux and Redux Observable in TypeScript.",
   "repository": {

@@ -18,9 +18,9 @@ Redux Observable Util is a helper library for using [Redux](https://redux.js.org
 
 |Module|Version|
 |---|---|
-|redux|^4.0.0"|
-|redux-observable|^1.0.0"|
-|rxjs|^6.0.0"|
+|redux|^4.0.0|
+|redux-observable|^1.0.0|
+|rxjs|^6.0.0|
 
 ## Defining Redux Observable Epics
 
@@ -42,7 +42,7 @@ somethingEpic = (action$, state$) =>
 ### After
 
 ```typescript
-@NgEpic('SOMETHING')
+@Epic('SOMETHING')
 somethingEpic(action: AnyAction, state$: any) {
   // Add logic
 
@@ -52,7 +52,7 @@ somethingEpic(action: AnyAction, state$: any) {
 
 ### Configuring Epics in Store
 
-Configuration of the epics is also simplified compared to the standard setup of Redux Observable. You call the generateEpics instead of combineEpics, and pass the services that contain @NgEpic decorators.
+Configuration of the epics is also simplified compared to the standard setup of Redux Observable. You call the generateEpics instead of combineEpics, and pass the services that contain @Epic decorators.
 
 ### Before
 

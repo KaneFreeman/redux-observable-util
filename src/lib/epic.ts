@@ -1,27 +1,27 @@
 const METADATA_KEY = '__redux-observable-util__';
 
-export interface NgEpicMetadata<T> {
+export interface EpicMetadata<T> {
   propertyName: string;
   type: string;
 }
 
-function setNgEpicMetadataEntries<T>(sourceProto: T, entries: NgEpicMetadata<T>[]) {
+function setEpicMetadataEntries<T>(sourceProto: T, entries: EpicMetadata<T>[]) {
   const constructor = sourceProto.constructor;
-  const meta: Array<NgEpicMetadata<T>> = constructor.hasOwnProperty(METADATA_KEY)
+  const meta: Array<EpicMetadata<T>> = constructor.hasOwnProperty(METADATA_KEY)
     ? (constructor as any)[METADATA_KEY]
     : Object.defineProperty(constructor, METADATA_KEY, { value: [] })[ METADATA_KEY ];
 
   Array.prototype.push.apply(meta, entries);
 }
 
-export function NgEpic<T>(type: string): MethodDecorator {
+export function Epic<T>(type: string): MethodDecorator {
   return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
-    const metadata: NgEpicMetadata<T> = { propertyName, type };
-    setNgEpicMetadataEntries<T>(target, [metadata]);
+    const metadata: EpicMetadata<T> = { propertyName, type };
+    setEpicMetadataEntries<T>(target, [metadata]);
   };
 }
 
-export function getNgEpicMetadataEntries<T>(sourceProto: T): NgEpicMetadata<T>[] {
+export function getEpicMetadataEntries<T>(sourceProto: T): EpicMetadata<T>[] {
   return sourceProto.constructor.hasOwnProperty(METADATA_KEY)
     ? (sourceProto.constructor as any)[METADATA_KEY]
     : [];
