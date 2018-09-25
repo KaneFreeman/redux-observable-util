@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "ng": "ng",
     "build": "ng build --prod",
     "lint": "tslint -c tslint.json src/**/*.ts",
     "lib_pack": "cd dist && npm pack",
