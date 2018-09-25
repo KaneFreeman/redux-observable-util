@@ -44,37 +44,12 @@ jobs:
       - restore_cache: *deps_cache
       - run: yarn lint
 
-  test:
-    <<: *defaults
-    steps:
-      - restore_cache: *repo_cache
-      - restore_cache: *deps_cache
-      - run: yarn test:ci
-
   build:
     <<: *defaults
     steps:
       - restore_cache: *repo_cache
       - restore_cache: *deps_cache
       - run: yarn build
-
-  deploy:
-    <<: *defaults
-    filters:
-      tags:
-        only: /.*/
-      branches:
-        only: master
-    steps:
-      - restore_cache: *repo_cache
-      - restore_cache: *deps_cache
-      - run: yarn package
-      - run:
-          name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/repo/.npmrc
-      - run:
-          name: Publish package
-          command: npm publish
 
 workflows:
   version: 2
@@ -87,14 +62,6 @@ workflows:
       - lint:
           requires:
             - install_dependencies
-      - test:
-          requires:
-            - install_dependencies
       - build:
           requires:
             - install_dependencies
-#      - deploy:
-#          requires:
-#            - lint
-#            - test
-#            - build
