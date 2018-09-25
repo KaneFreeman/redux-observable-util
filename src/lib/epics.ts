@@ -7,14 +7,6 @@ import { assign } from './assign';
 
 import { getNgEpicMetadataEntries } from './ng-epic';
 
-export function createAction(type: string, payload?: any): AnyAction {
-  return { type: type, payload: payload };
-}
-
-export function convertAction(action: AnyAction): AnyAction {
-  return assign(action);
-}
-
 export function generateEpics(...epicSources: any[]) {
   const epicObservables: Epic<AnyAction, AnyAction, void, any>[] = [];
 
